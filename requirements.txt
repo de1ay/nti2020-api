@@ -6,3 +6,4 @@ django-filter
 django-guardian
 django-rest-auth
 uwsgi
+django-cors-headers
