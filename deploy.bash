@@ -16,6 +16,6 @@ docker kill -s HUP app
 fi
 cd /usr/app/source
 docker-compose pull
-docker-compose up -d
+docker-compose up --build -d
 docker container prune -f
 docker image prune -f

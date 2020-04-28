@@ -11,11 +11,18 @@
         - POSTGRES_PASSWORD=postgres
     web:
       build: .
-      command: bash -c "sleep 5 && python ./manage.py makemigrations && python ./manage.py migrate --run-syncdb && python manage.py runserver 0.0.0.0:80"
+      restart: always
+      command: bash -c "sleep 5 && python ./manage.py makemigrations && python ./manage.py collectstatic && python ./manage.py migrate --run-syncdb && uwsgi --ini uwsgi/uwsgi.ini"
       volumes:
         - .:/code
-      ports:
-        - "80:80"
       depends_on:
         - db
-
+    nginx:
+        build: ./nginx
+        restart: always
+        ports:
+        - "80:80"
+        volumes:
+        - .:/docker_api
+        depends_on:
+        - web
