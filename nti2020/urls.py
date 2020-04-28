@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
+from django.conf import settings
 
 
 # Wire up our API using automatic URL routing.
@@ -28,9 +29,13 @@ urlpatterns = [
     url(r'^rest-auth/', include('rest_auth.urls')),
 ]
 
-from django.conf.urls.static import static
-from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.conf import settings
+if settings.DEBUG:
+    from django.conf.urls.static import static
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    # static/media files
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += staticfiles_urlpatterns()
 
-urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-urlpatterns += staticfiles_urlpatterns()
+    #import debug_toolbar
+    #urlpatterns += [url(r'^__debug__/', include(debug_toolbar.urls))]

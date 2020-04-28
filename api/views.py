@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import viewsets
 from .models import UserInfo
-from .serializers import UserInfoSerializer, UserSerializer
+from .serializers import UserInfoSerializer, UserSerializer, PasswordSerializer
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -15,16 +15,6 @@ from django.shortcuts import get_object_or_404
 class UserInfoViewSet(viewsets.ModelViewSet):
     queryset = UserInfo.objects.all()
     serializer_class = UserInfoSerializer
-
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action in ['list','retrieve','user']:
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [permissions.IsAdminUser]
-        return [permission() for permission in permission_classes]
 
     @action(detail=False)
     def user(self, request, *args, **kwargs):
@@ -45,12 +35,18 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
 
-    def get_permissions(self):
-        """
-        Instantiates and returns the list of permissions that this view requires.
-        """
-        if self.action in ['list','retrieve','me']:
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [permissions.IsAdminUser]
-        return [permission() for permission in permission_classes]
+    @action(detail=True, methods=['put'], permission_classes=(permissions.IsAdminUser,), serializer_class=PasswordSerializer)
+    def change_password(self, request, pk=None):
+        serializer = PasswordSerializer(data=request.data)
+
+        if serializer.is_valid():
+            #if not request.user.check_password(serializer.data.get('old_password')):
+            #    return Response({'old_password': ['Wrong password.']},
+            #                    status=400)
+            # set_password also hashes the password that the user will get
+            request.user.set_password(serializer.data.get('new_password'))
+            request.user.save()
+            return Response({'status': 'password set'}, status=200)
+
+        return Response(serializer.errors,
+                        status=400)
