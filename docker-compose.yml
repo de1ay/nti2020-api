@@ -12,7 +12,7 @@
     web:
       build: .
       restart: always
-      command: bash -c "sleep 5 && python ./manage.py makemigrations && python ./manage.py collectstatic && python ./manage.py migrate --run-syncdb && uwsgi --ini uwsgi/uwsgi.ini"
+      command: bash -c "sleep 5 && python ./manage.py makemigrations && python ./manage.py collectstatic --noinput && python ./manage.py migrate --run-syncdb && uwsgi --ini uwsgi/uwsgi.ini"
       volumes:
         - .:/code
       depends_on:
