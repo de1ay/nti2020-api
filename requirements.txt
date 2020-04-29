@@ -8,3 +8,4 @@ django-rest-auth
 uwsgi
 django-cors-headers
 Pillow
+django-webpush

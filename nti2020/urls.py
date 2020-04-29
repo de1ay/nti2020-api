@@ -17,14 +17,17 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 from django.conf import settings
+from api.views import main
 
 
 # Wire up our API using automatic URL routing.
 # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
+    path('', main),
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('chat/', include('chat.urls')),
+    url(r'^webpush/', include('webpush.urls')),
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^rest-auth/', include('rest_auth.urls')),
 ]

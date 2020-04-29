@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
+    'webpush',
     'corsheaders',
     'api',
     'chat',
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'nti2020.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -148,3 +149,10 @@ CORS_ORIGIN_WHITELIST = [
     "http://antares.nullteam.info",
     "http://127.0.0.1:8080",
 ]
+
+# PUSH keys
+WEBPUSH_SETTINGS = {
+    "VAPID_PUBLIC_KEY": "BFsj3DGCUIf-VtBUGcAFwj5-f3FE24HsZtgBF4UIXOH3E4alHJg4wPJXuL3EeaTz8m0_ASNWf1YkRSiBIDxkti4",
+    "VAPID_PRIVATE_KEY":"oP5HmLMAOhb2e6OV2MAwJ3rpmaWBjJZpUUuC1vMidio",
+    "VAPID_ADMIN_EMAIL": "de1ay@nullteam.info"
+}

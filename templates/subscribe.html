@@ -1,0 +1,8 @@
+{% load webpush_notifications %}
+<head>
+  {% webpush_header %}
+</head>
+<body>
+  <p> Username: {{ request.user.username }} </p>
+  {% webpush_button %}
+</body>

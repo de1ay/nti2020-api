@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
+from webpush import send_user_notification
 
 
 class MessageViewSet(viewsets.GenericViewSet):
@@ -24,6 +25,11 @@ class MessageViewSet(viewsets.GenericViewSet):
         if serializer.is_valid() and request.user == serializer.validated_data['sender']:
             serializer.validated_data['is_read'] = False
             serializer.save()
+            payload = {"head": "Medis Group LLC",
+                       "body": f"Сообщение от пользователя {serializer.validated_data['sender']}",
+                       #"icon": "https://i.imgur.com/dRDxiCQ.png",
+                       "url": f"http://api.antares.nullteam.info/chat/messages/{serializer.instance.pk}"}
+            send_user_notification(user=serializer.validated_data['receiver'], payload=payload, ttl=1000)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
 

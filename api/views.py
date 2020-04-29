@@ -5,7 +5,8 @@ from .serializers import UserInfoSerializer, UserSerializer, PasswordSerializer
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
+#from webpush import send_user_notification
 
 
 # Create your views here.
@@ -50,3 +51,13 @@ class UserViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors,
                         status=400)
+
+
+def subscribe(request):
+    #payload = {"head": "Welcome!", "body": "Hello World", "icon": "https://i.imgur.com/dRDxiCQ.png", "url": "http://localhost/api/users"}
+    #send_user_notification(user=request.user, payload=payload, ttl=1000)
+    return render(request, 'subscribe.html')
+
+
+def main(request):
+    return render(request, 'index.html')
