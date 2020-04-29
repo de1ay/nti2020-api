@@ -13,6 +13,8 @@
       build: .
       restart: always
       command: bash -c "sleep 5 && python ./manage.py makemigrations && python ./manage.py collectstatic --noinput && python ./manage.py migrate --run-syncdb && uwsgi --ini uwsgi/uwsgi.ini"
+      ports:
+        - "8080:8080"
       volumes:
         - .:/code
       depends_on:
