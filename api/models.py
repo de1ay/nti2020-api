@@ -11,7 +11,7 @@ class UserInfo(models.Model):
     age = models.PositiveSmallIntegerField()
     position = models.CharField(max_length=100)
     experience = models.PositiveSmallIntegerField()
-    avatar = models.ImageField()
+    avatar = models.ImageField(blank=True)
 
     def __str__(self):
         return self.user.username
