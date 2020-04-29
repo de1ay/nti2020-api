@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'api',
     'chat',
+    'mon',
 ]
 
 MIDDLEWARE = [
@@ -145,7 +146,9 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'nti2020.pagination.OurPagination',
+    'PAGE_SIZE': 20
 }
 
 # CORS

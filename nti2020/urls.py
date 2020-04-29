@@ -27,6 +27,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),
     path('chat/', include('chat.urls')),
+    path('mon/', include('mon.urls')),
     url(r'^webpush/', include('webpush.urls')),
     url(r'^api-auth/', include('rest_framework.urls')),
     url(r'^rest-auth/', include('rest_auth.urls')),

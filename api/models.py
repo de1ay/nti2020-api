@@ -12,3 +12,6 @@ class UserInfo(models.Model):
     position = models.CharField(max_length=100)
     experience = models.PositiveSmallIntegerField()
     avatar = models.ImageField()
+
+    def __str__(self):
+        return self.user.username
