@@ -9,3 +9,4 @@ uwsgi
 django-cors-headers
 Pillow
 django-webpush
+django-filter
