@@ -14,7 +14,7 @@ class MachineRecord(models.Model):
     work_time = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.date_captured
+        return self.date_captured.isoformat()
 
     class Meta:
         ordering = ('date_captured',)
