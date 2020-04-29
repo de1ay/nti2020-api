@@ -154,8 +154,8 @@ REST_FRAMEWORK = {
 # CORS
 
 CORS_ORIGIN_WHITELIST = [
-    "http://antares.nullteam.info",
-    "http://127.0.0.1:8080",
+    "https://antares.nullteam.info",
+    "http://127.0.0.1:8081",
 ]
 
 # PUSH keys
