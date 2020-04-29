@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from django_filters import rest_framework as filters
 from .models import *
 from .serializers import *
+from .critical import *
 
 # Create your views here.
 
@@ -43,3 +44,20 @@ class RecordViewSet(viewsets.ModelViewSet):
     queryset = MachineRecord.objects.all()
     serializer_class = MachineRecordSerializer
     filterset_class = RecordFilter
+
+    def create(self, request):
+        serializer = MachineRecordSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = serializer.instance
+            check_data(data)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
+
+
+class ReceiveNotifications(viewsets.ModelViewSet):
+    """
+    Users, who will get notifications on monitoring
+    """
+    queryset = ReceiveNotifications.objects.all()
+    serializer_class = ReceiveNotificationsSerializer

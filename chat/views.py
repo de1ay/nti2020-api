@@ -16,7 +16,7 @@ class MessageViewSet(viewsets.GenericViewSet):
     serializer_class = MessageSerializer
     permission_classes = [IsAuthenticated]
     def list(self, request):
-        queryset = self.queryset.filter(receiver=request.user, is_read=False)
+        queryset = self.get_queryset().filter(receiver=request.user, is_read=False)
         serializer = MessageSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -34,7 +34,7 @@ class MessageViewSet(viewsets.GenericViewSet):
         return Response(serializer.errors, status=400)
 
     def retrieve(self, request, pk=None):
-        queryset = self.queryset
+        queryset = self.get_queryset()
         msg = get_object_or_404(queryset, pk=pk)
         if not ((msg.receiver == request.user) or (msg.sender == request.user)) :
             return Response({"detail": "Not allowed"}, status=401)
@@ -47,7 +47,7 @@ class MessageViewSet(viewsets.GenericViewSet):
         if not 'target_id' in kwargs:
             return Response({"detail": "No data"}, status=400)
         target_user = int(kwargs['target_id'])
-        queryset = self.queryset.filter(receiver=request.user, sender=target_user)
+        queryset = self.get_queryset().filter(receiver=request.user, sender=target_user)
         serializer = MessageSerializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -98,7 +98,7 @@ class ChatMessageViewSet(viewsets.GenericViewSet):
     def retrieve(self, request, pk=None):
         chat = get_object_or_404(ChatGroup.objects.all(), id=pk)
         get_object_or_404(ChatUsers.objects.filter(chat=chat), user=request.user)
-        queryset = self.queryset.filter(chat=chat)
+        queryset = self.get_queryset().filter(chat=chat)
         serializer = ChatMessageSerializer(queryset, many=True)
         return Response(serializer.data)
 

@@ -8,3 +8,9 @@ class MachineRecordSerializer(serializers.ModelSerializer):
     class Meta:
         model = MachineRecord
         fields = '__all__'
+
+
+class ReceiveNotificationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ReceiveNotifications
+        fields = '__all__'

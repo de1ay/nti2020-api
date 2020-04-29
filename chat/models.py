@@ -22,11 +22,17 @@ class ChatGroup(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='owner', blank=False)
     name = models.CharField(max_length=200, blank=False)
 
+    def __str__(self):
+        return self.name
+
 
 class ChatUsers(models.Model):
     chat = models.ForeignKey(ChatGroup, on_delete=models.CASCADE, blank=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
     receive_notifications = models.BooleanField(default=True, blank=False)
+
+    def __str__(self):
+        return self.chat.name + ' ' + self.user.username
 
 
 class ChatMessage(models.Model):

@@ -1,5 +1,6 @@
 from django.contrib import admin
-from mon.models import MachineRecord
+from .models import *
 
 # Register your models here.
 admin.site.register(MachineRecord)
+admin.site.register(ReceiveNotifications)
