@@ -7,6 +7,9 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'messages', views.MessageViewSet, basename='message')
+router.register(r'chat-group', views.ChatGroupViewSet, basename='chat-group')
+router.register(r'chat-users', views.ChatUsersViewSet, basename='chat-users')
+router.register(r'chat-message', views.ChatMessageViewSet, basename='chat-message')
 
 
 urlpatterns = [

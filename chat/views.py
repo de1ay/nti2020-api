@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from chat.models import Message
-from chat.serializers import MessageSerializer
+from .models import *
+from .serializers import *
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
@@ -28,7 +28,7 @@ class MessageViewSet(viewsets.GenericViewSet):
             payload = {"head": "Medis Group LLC",
                        "body": f"Сообщение от пользователя {serializer.validated_data['sender']}",
                        #"icon": "https://i.imgur.com/dRDxiCQ.png",
-                       "url": f"http://api.antares.nullteam.info/chat/messages/{serializer.instance.pk}"}
+                       "url": f"https://api.antares.nullteam.info/chat/messages/{serializer.instance.pk}"}
             send_user_notification(user=serializer.validated_data['receiver'], payload=payload, ttl=1000)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
@@ -60,3 +60,60 @@ class MessageViewSet(viewsets.GenericViewSet):
         message.is_read = True
         message.save()
         return Response({"detail":"success"})
+
+
+class ChatGroupViewSet(viewsets.ModelViewSet):
+    queryset = ChatGroup.objects.all()
+    serializer_class = ChatGroupSerializer
+
+
+class ChatUsersViewSet(viewsets.ModelViewSet):
+    queryset = ChatUsers.objects.all()
+    serializer_class = ChatUsersSerializer
+
+    @action(detail=True, permission_classes = [IsAuthenticated])
+    def enable_notifications(self, request, pk=None):
+        record = self.get_object()
+        if request.user != record.user:
+            return Response({"detail": "Not allowed"}, status=401)
+        record.receive_notifications = True
+        record.save()
+        return Response({"detail":"success"})
+
+    @action(detail=True, permission_classes = [IsAuthenticated])
+    def disable_notifications(self, request, pk=None):
+        record = self.get_object()
+        if request.user != record.user:
+            return Response({"detail": "Not allowed"}, status=401)
+        record.receive_notifications = False
+        record.save()
+        return Response({"detail":"success"})
+
+
+class ChatMessageViewSet(viewsets.GenericViewSet):
+    queryset = ChatMessage.objects.all()
+    serializer_class = ChatMessageSerializer
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, pk=None):
+        chat = get_object_or_404(ChatGroup.objects.all(), id=pk)
+        get_object_or_404(ChatUsers.objects.filter(chat=chat), user=request.user)
+        queryset = self.queryset.filter(chat=chat)
+        serializer = ChatMessageSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    def create(self, request):
+        serializer = ChatMessageSerializer(data=request.data)
+        if serializer.is_valid() and request.user == serializer.validated_data['sender']:
+            get_object_or_404(ChatUsers.objects.filter(chat=serializer.validated_data['chat']), user=request.user)
+            users = ChatUsers.objects.filter(chat=serializer.validated_data['chat'])
+            serializer.save()
+            for user in users:
+                if not user.receive_notifications:
+                    continue
+                payload = {"head": "Medis Group LLC",
+                           "body": f"Сообщение из чата {serializer.instance.chat.name}",
+                           "url": f"https://api.antares.nullteam.info/chat/messages/{serializer.instance.pk}"}
+                send_user_notification(user=user.user, payload=payload, ttl=1000)
+            return Response(serializer.data, status=201)
+        return Response(serializer.errors, status=400)
