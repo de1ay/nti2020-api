@@ -4,7 +4,6 @@ from . import views
 
 
 router = routers.DefaultRouter()
-router.register(r'machine', views.MachineViewSet)
 router.register(r'record', views.RecordViewSet)
 
 
