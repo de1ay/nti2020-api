@@ -9,6 +9,17 @@
         - POSTGRES_DB=postgres
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
+    pgsql:
+      image: dpage/pgadmin4
+      environment:
+        - PGADMIN_DEFAULT_EMAIL=admin@local.com
+        - PGADMIN_DEFAULT_PASSWORD=111
+      ports:
+        - "5050:80"
+      volumes:
+        - "./servers.json:/pgadmin4/servers.json"
+      depends_on:
+        - db
     web:
       build: .
       restart: always
