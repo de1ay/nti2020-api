@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from rest_framework import viewsets
 from .models import UserInfo
-from .serializers import UserInfoSerializer, UserSerializer, PasswordSerializer
+from .serializers import *
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -51,6 +51,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
         return Response(serializer.errors,
                         status=400)
+
+
+class GroupViewSet(viewsets.ModelViewSet):
+    queryset = Group.objects.all()
+    serializer_class = GroupSerializer
 
 
 def subscribe(request):
