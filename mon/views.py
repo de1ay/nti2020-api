@@ -10,10 +10,10 @@ from .critical import *
 
 
 class RecordFilter(filters.FilterSet):
-    min_date_captured = filters.DateTimeFilter(field_name="date_captured", lookup_expr='gte')
-    max_date_captured = filters.DateTimeFilter(field_name="date_captured", lookup_expr='lte')
-    min_date_received = filters.DateTimeFilter(field_name="date_received", lookup_expr='gte')
-    max_date_received = filters.DateTimeFilter(field_name="date_received", lookup_expr='lte')
+    min_date_captured = filters.IsoDateTimeFilter(field_name="date_captured", lookup_expr='gte')
+    max_date_captured = filters.IsoDateTimeFilter(field_name="date_captured", lookup_expr='lte')
+    min_date_received = filters.IsoDateTimeFilter(field_name="date_received", lookup_expr='gte')
+    max_date_received = filters.IsoDateTimeFilter(field_name="date_received", lookup_expr='lte')
     min_temperature = filters.NumberFilter(field_name="temperature", lookup_expr='gte')
     max_temperature = filters.NumberFilter(field_name="temperature", lookup_expr='lte')
     min_vibration = filters.NumberFilter(field_name="vibration", lookup_expr='gte')
