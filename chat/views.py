@@ -48,6 +48,7 @@ class MessageViewSet(viewsets.GenericViewSet):
             return Response({"detail": "No data"}, status=400)
         target_user = int(kwargs['target_id'])
         queryset = self.get_queryset().filter(receiver=request.user, sender=target_user)
+        queryset = queryset.union(self.get_queryset().filter(receiver=target_user, sender=request.user))
         serializer = MessageSerializer(queryset, many=True)
         return Response(serializer.data)
 
