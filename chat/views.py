@@ -28,7 +28,7 @@ class MessageViewSet(viewsets.GenericViewSet):
             payload = {"head": "Medis Group LLC",
                        "body": f"Сообщение от пользователя {serializer.validated_data['sender']}",
                        #"icon": "https://i.imgur.com/dRDxiCQ.png",
-                       "url": f"https://api.antares.nullteam.info/chat/messages/{serializer.instance.pk}"}
+                       "url": f"https://antares.nullteam.info/portal/chat/private/{serializer.instance.sender.id}"}
             send_user_notification(user=serializer.validated_data['receiver'], payload=payload, ttl=1000)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
@@ -114,7 +114,7 @@ class ChatMessageViewSet(viewsets.GenericViewSet):
                     continue
                 payload = {"head": "Medis Group LLC",
                            "body": f"Сообщение из чата {serializer.instance.chat.name}",
-                           "url": f"https://api.antares.nullteam.info/chat/messages/{serializer.instance.pk}"}
+                           "url": f"https://antares.nullteam.info/portal/chat/group/{serializer.instance.chat.id}"}
                 send_user_notification(user=user.user, payload=payload, ttl=1000)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
