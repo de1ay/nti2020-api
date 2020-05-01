@@ -5,6 +5,7 @@ from . import views
 
 router = routers.DefaultRouter()
 router.register(r'record', views.RecordViewSet)
+router.register(r'receive', views.ReceiveNotifications)
 
 
 urlpatterns = [

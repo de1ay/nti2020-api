@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from django_filters import rest_framework as filters
 from .models import *
 from .serializers import *
@@ -53,6 +54,15 @@ class RecordViewSet(viewsets.ModelViewSet):
             check_data(data)
             return Response(serializer.data, status=201)
         return Response(serializer.errors, status=400)
+
+    @action(detail=False)
+    def get_last_info(self, request, pk=None):
+        machines_num = 12
+        queryset = []
+        for mach in range(1, machines_num+1):
+            queryset.append(MachineRecord.objects.filter(machine_id=mach).order_by('-date_captured')[0])
+        serializer = MachineRecordSerializer(queryset, many=True)
+        return Response(serializer.data, status=200)
 
 
 class ReceiveNotifications(viewsets.ModelViewSet):
