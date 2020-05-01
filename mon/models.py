@@ -22,6 +22,6 @@ class MachineRecord(models.Model):
 
 
 class ReceiveNotifications(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=False)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=False)
     def __str__(self):
         return self.user.username
